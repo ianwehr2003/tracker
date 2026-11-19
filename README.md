@@ -1,6 +1,8 @@
 # FitTrack
 
 A mobile-first web app for gaining muscle: log food, train at home with automatic progression, track weight, and keep a shopping list.
+**Live app:** https://ianwehr2003.github.io/tracker/ (redeployed automatically on every push to `main`)
+
 All data stays on your device (localStorage). Back it up with **Settings → Export backup**.
 
 ## Features (v0.1)

@@ -1,4 +1,4 @@
-# FitTrack
+# Tracker
 
 A mobile-first web app for gaining muscle: log food, train at home with automatic progression, track weight, and keep a shopping list.
 

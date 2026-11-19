@@ -53,7 +53,7 @@ export function App() {
     return (
       <main className="app">
         <div className="stack">
-          <h1>Welcome to FitTrack 💪</h1>
+          <h1>Welcome to Tracker 💪</h1>
           {!user && (
             <Card title="Already have an account?">
               <AccountPanel compact />
@@ -77,7 +77,7 @@ export function App() {
   return (
     <>
       <header className="topbar">
-        <span className="brand">FitTrack</span>
+        <span className="brand">Tracker</span>
         <span className="row gap-s">
           <button className="icon-btn" onClick={() => go('settings')} aria-label="Account and sync">
             <SyncBadge />

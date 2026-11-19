@@ -16,7 +16,7 @@ export function Settings() {
     const blob = new Blob([exportJSON(state)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `fittrack-backup-${date}.json`;
+    a.download = `tracker-backup-${date}.json`;
     a.click();
     URL.revokeObjectURL(a.href);
   };
@@ -90,7 +90,7 @@ export function Settings() {
           </button>
         </div>
       </Card>
-      <p className="hint center">FitTrack v0.1 · nutrition values are approximate</p>
+      <p className="hint center">Tracker v0.2 · nutrition values are approximate</p>
     </div>
   );
 }

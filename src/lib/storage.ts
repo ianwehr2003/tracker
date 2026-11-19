@@ -1,5 +1,6 @@
 import type { AppState } from './types';
 
+// Storage keys keep the original 'fittrack' prefix so existing data still loads.
 const KEY = 'fittrack:v1';
 
 export function defaultState(): AppState {
@@ -64,7 +65,7 @@ export function importJSON(text: string): AppState {
   const parsed = JSON.parse(text);
   const state = parsed?.app === 'fittrack' ? parsed.state : parsed;
   if (!state || typeof state !== 'object' || !Array.isArray(state.entries)) {
-    throw new Error('This file is not a FitTrack backup.');
+    throw new Error('This file is not a Tracker backup.');
   }
   return migrate(state);
 }

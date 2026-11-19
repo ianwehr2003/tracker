@@ -943,3 +943,52 @@ details summary {
   border-radius: 12px;
   flex: none;
 }
+
+/* Edit food entry */
+.edit-pencil {
+  color: var(--muted);
+  font-size: 0.95rem;
+  flex: none;
+  width: 18px;
+  text-align: center;
+}
+.amount-edit {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.amount-edit input {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+}
+.round-btn {
+  width: 44px;
+  height: 44px;
+  flex: none;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+.undo-bar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(76px + env(safe-area-inset-bottom));
+  z-index: 20;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  background: var(--text);
+  color: var(--bg);
+  padding: 10px 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
+  max-width: calc(100% - 32px);
+}
+.undo-bar .link {
+  color: var(--accent);
+  align-self: center;
+}

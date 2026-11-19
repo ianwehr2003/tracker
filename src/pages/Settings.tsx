@@ -1,11 +1,14 @@
 import { useRef, useState } from 'react';
+import { AccountPanel } from '../components/AccountCard';
 import { Card } from '../components/ui';
 import { exportJSON, importJSON, defaultState } from '../lib/storage';
 import { useStore } from '../lib/store';
+import { useSync } from '../lib/sync';
 import { DEFAULT_PROFILE, ProfileForm } from './ProfileForm';
 
 export function Settings() {
   const { state, update, replace, weightKg, date } = useStore();
+  const { user } = useSync();
   const fileRef = useRef<HTMLInputElement>(null);
   const [msg, setMsg] = useState('');
 
@@ -20,6 +23,10 @@ export function Settings() {
 
   return (
     <div className="stack">
+      <Card title="Account & sync">
+        <AccountPanel />
+      </Card>
+
       <Card title="Your profile & targets">
         <ProfileForm
           initial={state.profile ?? DEFAULT_PROFILE}
@@ -39,7 +46,9 @@ export function Settings() {
 
       <Card title="Your data">
         <p className="hint">
-          Everything is stored on this device only. Export a backup regularly, or to move to another phone/browser.
+          {user
+            ? 'Your data is saved on this device and in the cloud. You can also download a backup file.'
+            : 'Everything is stored on this device only. Sign in above, or export a backup regularly.'}
         </p>
         <div className="row gap-s wrap">
           <button className="btn" onClick={download}>
@@ -71,7 +80,10 @@ export function Settings() {
           <button
             className="btn danger"
             onClick={() => {
-              if (confirm('Delete ALL data on this device? Export a backup first if you want to keep it.')) replace(defaultState());
+              const msg = user
+                ? 'Delete ALL your data, on this device AND in the cloud? This cannot be undone.'
+                : 'Delete ALL data on this device? Export a backup first if you want to keep it.';
+              if (confirm(msg)) replace(defaultState());
             }}
           >
             Reset everything

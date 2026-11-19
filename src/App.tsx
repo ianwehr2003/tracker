@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { AccountPanel, SyncBadge } from './components/AccountCard';
 import { Card } from './components/ui';
 import { useStore } from './lib/store';
+import { useSync } from './lib/sync';
 import { FoodPage } from './pages/Food';
 import { DEFAULT_PROFILE, ProfileForm } from './pages/ProfileForm';
 import { ProgressPage } from './pages/Progress';
@@ -26,6 +28,7 @@ const readHash = (): Tab => {
 
 export function App() {
   const { state, update, date, saveError } = useStore();
+  const { user, status, authLoading } = useSync();
   const [tab, setTab] = useState<Tab>(readHash);
 
   useEffect(() => {
@@ -40,11 +43,25 @@ export function App() {
   };
 
   if (!state.profile) {
+    if (authLoading || (user && status === 'loading')) {
+      return (
+        <main className="app">
+          <p className="empty">Loading your data…</p>
+        </main>
+      );
+    }
     return (
       <main className="app">
         <div className="stack">
           <h1>Welcome to FitTrack 💪</h1>
-          <p className="muted">Track food, workouts and weight to build muscle. First, a few details to set your daily calorie and protein targets.</p>
+          {!user && (
+            <Card title="Already have an account?">
+              <AccountPanel compact />
+            </Card>
+          )}
+          <p className="muted">
+            {user ? 'Signed in! ' : 'New here? '}A few details to set your daily calorie and protein targets.
+          </p>
           <Card>
             <ProfileForm
               initial={DEFAULT_PROFILE}
@@ -61,9 +78,14 @@ export function App() {
     <>
       <header className="topbar">
         <span className="brand">FitTrack</span>
-        <button className={`icon-btn ${tab === 'settings' ? 'active' : ''}`} onClick={() => go('settings')} aria-label="Settings">
-          ⚙️
-        </button>
+        <span className="row gap-s">
+          <button className="icon-btn" onClick={() => go('settings')} aria-label="Account and sync">
+            <SyncBadge />
+          </button>
+          <button className={`icon-btn ${tab === 'settings' ? 'active' : ''}`} onClick={() => go('settings')} aria-label="Settings">
+            ⚙️
+          </button>
+        </span>
       </header>
       {saveError && <div className="banner">Couldn’t save to this device (storage full or private mode). Export a backup in Settings.</div>}
       <main className="app">

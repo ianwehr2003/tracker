@@ -838,3 +838,50 @@ details summary {
     grid-template-columns: 1fr 1fr;
   }
 }
+
+/* Account & sync */
+.sync-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 800;
+  background: var(--surface-2);
+  color: var(--muted);
+  flex: none;
+}
+.sync-badge.synced {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.sync-badge.saving,
+.sync-badge.loading {
+  color: var(--bar);
+}
+.sync-badge.offline,
+.sync-badge.error {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+.btn.google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--surface);
+}
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--border);
+}

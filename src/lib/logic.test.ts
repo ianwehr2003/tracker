@@ -151,3 +151,12 @@ describe('records & streaks', () => {
     expect(startOfWeek('2026-11-19')).toBe('2026-11-16');
   });
 });
+
+describe('meal ideas', () => {
+  it('only use foods that exist', async () => {
+    const { MEAL_IDEAS } = await import('../data/mealIdeas');
+    const ids = new Set(BUILTIN_FOODS.map((f) => f.id));
+    const missing = MEAL_IDEAS.flatMap((m) => m.items.filter((i) => !ids.has(i.foodId)).map((i) => `${m.id}: ${i.foodId}`));
+    expect(missing).toEqual([]);
+  });
+});

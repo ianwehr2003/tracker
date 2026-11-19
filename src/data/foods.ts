@@ -23,6 +23,7 @@ const table: Record<FoodCategory, Row[]> = {
     ['sweet-potato', 'Sweet potato (raw)', 86, 1.6, 20, 0.1],
     ['rice-cakes', 'Rice cakes', 387, 8.2, 81.5, 2.8, ['cake', 9]],
     ['granola', 'Granola', 471, 10, 64, 20],
+    ['instant-noodles', 'Instant noodles (dry block)', 450, 9, 60, 19, ['pack', 85]],
   ],
   'Meat & Fish': [
     ['chicken-breast-raw', 'Chicken breast (raw)', 120, 22.5, 0, 2.6],
@@ -46,6 +47,7 @@ const table: Record<FoodCategory, Row[]> = {
     ['cottage-cheese', 'Cottage cheese (low fat)', 81, 10.5, 4.8, 2.3],
     ['cheddar', 'Cheddar cheese', 403, 25, 1.3, 33],
     ['mozzarella', 'Mozzarella', 280, 22, 2.2, 20],
+    ['parmesan', 'Parmesan', 431, 38, 4, 29, ['tbsp', 5]],
     ['butter', 'Butter', 717, 0.9, 0.1, 81, ['tbsp', 14]],
   ],
   'Legumes & Tofu': [
@@ -55,6 +57,7 @@ const table: Record<FoodCategory, Row[]> = {
     ['black-beans-cooked', 'Black beans (cooked)', 132, 8.9, 23.7, 0.5],
     ['tofu', 'Tofu, firm', 144, 17.3, 2.8, 8.7],
     ['hummus', 'Hummus', 166, 7.9, 14.3, 9.6],
+    ['baked-beans', 'Baked beans (canned)', 78, 4.7, 12.9, 0.2, ['can', 415]],
   ],
   Fruit: [
     ['banana', 'Banana', 89, 1.1, 23, 0.3, ['banana', 120]],
@@ -74,6 +77,7 @@ const table: Record<FoodCategory, Row[]> = {
     ['bell-pepper', 'Bell pepper', 31, 1, 6, 0.3, ['pepper', 150]],
     ['onion', 'Onion', 40, 1.1, 9.3, 0.1],
     ['mixed-veg-frozen', 'Mixed vegetables (frozen)', 65, 2.9, 13, 0.2],
+    ['passata', 'Tomato passata / pasta sauce', 32, 1.4, 5.5, 0.2],
   ],
   'Nuts, Seeds & Oils': [
     ['peanut-butter', 'Peanut butter', 588, 25, 20, 50, ['tbsp', 15]],
@@ -88,6 +92,7 @@ const table: Record<FoodCategory, Row[]> = {
   'Snacks & Other': [
     ['dark-chocolate', 'Dark chocolate 70%', 598, 7.8, 46, 43],
     ['honey', 'Honey', 304, 0.3, 82, 0, ['tbsp', 21]],
+    ['pesto', 'Pesto (jar)', 450, 5, 6, 45, ['tbsp', 15]],
   ],
 };
 

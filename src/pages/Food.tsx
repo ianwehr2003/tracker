@@ -7,8 +7,9 @@ import { uid } from '../lib/id';
 import { macrosFor, sumEntries } from '../lib/nutrition';
 import { useStore } from '../lib/store';
 import { MEAL_SLOTS, type FoodEntry, type MealSlot } from '../lib/types';
+import type { Tab } from '../App';
 
-export function FoodPage() {
+export function FoodPage({ go }: { go: (t: Tab) => void }) {
   const { state, update, foods, targets, date: todayDate } = useStore();
   const [date, setDate] = useState(todayDate);
   const [adding, setAdding] = useState<MealSlot | null>(null);
@@ -31,7 +32,15 @@ export function FoodPage() {
 
   return (
     <div className="stack">
-      <DateNav value={date} onChange={setDate} max={todayDate} />
+      <div className="row gap-s">
+        <div className="grow">
+          <DateNav value={date} onChange={setDate} max={todayDate} />
+        </div>
+        <button className="meals-btn" onClick={() => go('meals')} aria-label="My meals">
+          <span aria-hidden>🍱</span>
+          Meals
+        </button>
+      </div>
 
       <Card>
         <Progress label="Calories" value={totals.kcal} target={targets?.kcal} unit=" kcal" />

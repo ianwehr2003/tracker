@@ -4,6 +4,7 @@ import { Card } from './components/ui';
 import { useStore } from './lib/store';
 import { useSync } from './lib/sync';
 import { FoodPage } from './pages/Food';
+import { MealsPage } from './pages/Meals';
 import { DEFAULT_PROFILE, ProfileForm } from './pages/ProfileForm';
 import { ProgressPage } from './pages/Progress';
 import { Settings } from './pages/Settings';
@@ -11,7 +12,7 @@ import { ShopPage } from './pages/Shop';
 import { TodayPage } from './pages/Today';
 import { TrainPage } from './pages/Train';
 
-export type Tab = 'today' | 'food' | 'train' | 'progress' | 'shop' | 'settings';
+export type Tab = 'today' | 'food' | 'meals' | 'train' | 'progress' | 'shop' | 'settings';
 
 const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: 'today', label: 'Today', icon: '☀️' },
@@ -23,7 +24,7 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
 
 const readHash = (): Tab => {
   const h = window.location.hash.slice(1) as Tab;
-  return [...TABS.map((t) => t.id), 'settings'].includes(h) ? h : 'today';
+  return [...TABS.map((t) => t.id), 'settings', 'meals'].includes(h) ? h : 'today';
 };
 
 export function App() {
@@ -90,7 +91,8 @@ export function App() {
       {saveError && <div className="banner">Couldn’t save to this device (storage full or private mode). Export a backup in Settings.</div>}
       <main className="app">
         {tab === 'today' && <TodayPage go={go} />}
-        {tab === 'food' && <FoodPage />}
+        {tab === 'food' && <FoodPage go={go} />}
+        {tab === 'meals' && <MealsPage go={go} />}
         {tab === 'train' && <TrainPage />}
         {tab === 'progress' && <ProgressPage />}
         {tab === 'shop' && <ShopPage />}
@@ -98,7 +100,12 @@ export function App() {
       </main>
       <nav className="tabbar">
         {TABS.map((t) => (
-          <button key={t.id} className={tab === t.id ? 'active' : ''} onClick={() => go(t.id)} aria-current={tab === t.id ? 'page' : undefined}>
+          <button
+            key={t.id}
+            className={tab === t.id || (t.id === 'food' && tab === 'meals') ? 'active' : ''}
+            onClick={() => go(t.id)}
+            aria-current={tab === t.id ? 'page' : undefined}
+          >
             <span aria-hidden>{t.icon}</span>
             {t.label}
             {t.id === 'train' && state.activeSession && <i className="dot-badge" aria-label="workout in progress" />}

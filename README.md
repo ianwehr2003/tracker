@@ -9,6 +9,7 @@ Works without an account (data stays on the device). Sign in with Google or emai
 ## Features (v0.1)
 
 - **Today:** calorie and protein progress, today's recommended workout, water, sleep and weigh-in.
+- **Meals (🍱 on the Food page):** save your usual meals and log them with one tap (choose the portion), plus ~16 quick student-meal ideas (filters: breakfast, mains, snacks, vegetarian, high protein) in `src/data/mealIdeas.ts`.
 - **Food:** ~70 built-in foods (per 100 g, raw and cooked versions), custom foods from package labels, household units (1 egg, 1 scoop…), saved meals, and copying yesterday's meals.
 - **Targets:** Mifflin–St Jeor maintenance + surplus; protein per kg of body weight; fat 25 %; carbs fill the rest.
 - **Train:**

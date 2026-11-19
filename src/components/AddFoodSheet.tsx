@@ -19,7 +19,23 @@ const CATEGORIES: FoodCategory[] = [
 
 type Tab = 'search' | 'meals' | 'custom';
 
-export function AddFoodSheet({ date, meal, onClose }: { date: ISODate; meal: MealSlot; onClose: () => void }) {
+/**
+ * Food search + amount picker. By default it logs to the diary; pass `onPick`
+ * to use it as a picker instead (e.g. adding ingredients to a saved meal).
+ */
+export function AddFoodSheet({
+  date,
+  meal,
+  onClose,
+  onPick,
+  title,
+}: {
+  date?: ISODate;
+  meal?: MealSlot;
+  onClose: () => void;
+  onPick?: (items: { foodId: string; grams: number }[]) => void;
+  title?: string;
+}) {
   const { state, update, allFoods, foods } = useStore();
   const [tab, setTab] = useState<Tab>('search');
   const [q, setQ] = useState('');
@@ -46,14 +62,16 @@ export function AddFoodSheet({ date, meal, onClose }: { date: ISODate; meal: Mea
   }, [q, allFoods, recent]);
 
   const add = (items: { foodId: string; grams: number }[]) => {
-    update((s) => ({ ...s, entries: [...s.entries, ...items.map((i) => ({ id: uid(), date, meal, ...i }))] }));
+    if (onPick) onPick(items);
+    else if (date && meal) update((s) => ({ ...s, entries: [...s.entries, ...items.map((i) => ({ id: uid(), date, meal, ...i }))] }));
     onClose();
   };
+  const actionLabel = onPick ? 'Add' : `Add to ${meal}`;
 
-  if (picked) return <AmountSheet food={picked} meal={meal} onBack={() => setPicked(null)} onClose={onClose} onAdd={(g) => add([{ foodId: picked.id, grams: g }])} />;
+  if (picked) return <AmountSheet food={picked} actionLabel={actionLabel} onBack={() => setPicked(null)} onClose={onClose} onAdd={(g) => add([{ foodId: picked.id, grams: g }])} />;
 
   return (
-    <Sheet title={`Add to ${meal}`} onClose={onClose}>
+    <Sheet title={title ?? actionLabel} onClose={onClose}>
       <div className="segmented">
         <button className={tab === 'search' ? 'active' : ''} onClick={() => setTab('search')}>
           Foods
@@ -99,7 +117,7 @@ export function AddFoodSheet({ date, meal, onClose }: { date: ISODate; meal: Mea
 
       {tab === 'meals' && (
         <ul className="list">
-          {!state.savedMeals.length && <Empty>No saved meals yet. Log a meal, then tap “Save as meal” on it.</Empty>}
+          {!state.savedMeals.length && <Empty>No saved meals yet. Create them on the 🍱 Meals page, or tap “Save as meal” under a meal in your diary.</Empty>}
           {state.savedMeals.map((m) => {
             const kcal = m.items.reduce((s, i) => s + (foods.get(i.foodId) ? macrosFor(foods.get(i.foodId)!, i.grams).kcal : 0), 0);
             const protein = m.items.reduce((s, i) => s + (foods.get(i.foodId) ? macrosFor(foods.get(i.foodId)!, i.grams).protein : 0), 0);
@@ -140,7 +158,7 @@ export function AddFoodSheet({ date, meal, onClose }: { date: ISODate; meal: Mea
   );
 }
 
-function AmountSheet({ food, meal, onBack, onClose, onAdd }: { food: Food; meal: MealSlot; onBack: () => void; onClose: () => void; onAdd: (grams: number) => void }) {
+function AmountSheet({ food, actionLabel, onBack, onClose, onAdd }: { food: Food; actionLabel: string; onBack: () => void; onClose: () => void; onAdd: (grams: number) => void }) {
   const [useUnit, setUseUnit] = useState(!!food.unit);
   const [amount, setAmount] = useState<number | ''>(food.unit ? 1 : 100);
   const grams = amount === '' ? 0 : useUnit && food.unit ? amount * food.unit.grams : amount;
@@ -201,7 +219,7 @@ function AmountSheet({ food, meal, onBack, onClose, onAdd }: { food: Food; meal:
         </div>
       </div>
       <button className="btn primary" disabled={grams <= 0} onClick={() => onAdd(Math.round(grams * 10) / 10)}>
-        Add {fmt(grams)} g to {meal}
+        {actionLabel.replace('Add', `Add ${fmt(grams)} g`)}
       </button>
     </Sheet>
   );

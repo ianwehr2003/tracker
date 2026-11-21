@@ -6,6 +6,7 @@ import type { Food, FoodCategory, ISODate, MealSlot } from '../lib/types';
 import { Empty, NumberField, Sheet, fmt } from './ui';
 
 const CATEGORIES: FoodCategory[] = [
+  'Cereals',
   'Grains & Bread',
   'Meat & Fish',
   'Dairy & Eggs',
@@ -13,9 +14,18 @@ const CATEGORIES: FoodCategory[] = [
   'Fruit',
   'Vegetables',
   'Nuts, Seeds & Oils',
+  'Meals & Fast food',
   'Supplements',
   'Snacks & Other',
 ];
+
+/** "Kellogg's Rösti" → "kelloggs rosti", so searches ignore accents and apostrophes. */
+export const normalize = (t: string) =>
+  t
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/['’`.-]/g, '');
 
 type Tab = 'search' | 'meals' | 'custom';
 
@@ -56,9 +66,15 @@ export function AddFoodSheet({
   }, [state.entries, foods]);
 
   const results = useMemo(() => {
-    const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+    const words = normalize(q).split(/\s+/).filter(Boolean);
     if (!words.length) return recent.length ? recent : allFoods.slice(0, 20);
-    return allFoods.filter((f) => words.every((w) => `${f.name} ${f.category}`.toLowerCase().includes(w))).slice(0, 40);
+    // Every typed word must match the start of a word in the food's name, category or keywords.
+    return allFoods
+      .filter((f) => {
+        const tokens = normalize(`${f.name} ${f.category} ${f.keywords ?? ''}`).split(/[^a-z0-9%]+/);
+        return words.every((w) => tokens.some((t) => t.startsWith(w)));
+      })
+      .slice(0, 40);
   }, [q, allFoods, recent]);
 
   const add = (items: { foodId: string; grams: number }[]) => {

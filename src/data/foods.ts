@@ -5,9 +5,23 @@ import type { Food, FoodCategory } from '../lib/types';
  * Brands vary — add a custom food with your package's label values for best accuracy.
  * Note raw/dry vs cooked: 100 g dry pasta ≈ 250 g cooked.
  */
-type Row = [id: string, name: string, kcal: number, protein: number, carbs: number, fat: number, unit?: [string, number]];
+type Row = [id: string, name: string, kcal: number, protein: number, carbs: number, fat: number, unit?: [string, number] | null, keywords?: string];
 
 const table: Record<FoodCategory, Row[]> = {
+  // Brand cereals: values from typical EU packs — check your box, recipes change.
+  Cereals: [
+    ['kelloggs-corn-flakes', "Kellogg's Corn Flakes", 378, 7, 84, 0.9, ['bowl', 40], 'cornflakes'],
+    ['kelloggs-frosties', "Kellogg's Frosties", 375, 4.5, 87, 0.6, ['bowl', 40], 'frosted flakes'],
+    ['kelloggs-special-k', "Kellogg's Special K", 375, 9, 79, 1.5, ['bowl', 40]],
+    ['kelloggs-crunchy-nut', "Kellogg's Crunchy Nut", 402, 6.5, 81, 5, ['bowl', 40]],
+    ['kelloggs-coco-pops', "Kellogg's Coco Pops", 387, 5, 84, 2.5, ['bowl', 40], 'chocos chocolate'],
+    ['kelloggs-rice-krispies', "Kellogg's Rice Krispies", 387, 6, 87, 1, ['bowl', 40], 'rice crispies'],
+    ['kelloggs-smacks', "Kellogg's Smacks", 375, 6.5, 83, 1.7, ['bowl', 40], 'honey smacks'],
+    ['kelloggs-krave', "Kellogg's Krave (chocolate)", 444, 7.5, 68, 15, ['bowl', 40], 'choco'],
+    ['kelloggs-all-bran', "Kellogg's All-Bran", 334, 14, 48, 3.5, ['bowl', 40], 'bran fibre'],
+    ['kelloggs-chocos', "Kellogg's Chocos", 382, 8, 76, 3, ['bowl', 40], 'chocolate'],
+    ['muesli', 'Muesli', 360, 10, 62, 6, ['bowl', 50], 'müsli birchermüesli'],
+  ],
   'Grains & Bread': [
     ['pasta-dry', 'Pasta (dry)', 371, 13, 75, 1.5],
     ['pasta-cooked', 'Pasta (cooked)', 158, 5.8, 31, 0.9],
@@ -24,6 +38,11 @@ const table: Record<FoodCategory, Row[]> = {
     ['rice-cakes', 'Rice cakes', 387, 8.2, 81.5, 2.8, ['cake', 9]],
     ['granola', 'Granola', 471, 10, 64, 20],
     ['instant-noodles', 'Instant noodles (dry block)', 450, 9, 60, 19, ['pack', 85]],
+    ['bread-roll', 'Bread roll', 270, 9, 53, 1.8, ['roll', 60], 'brötchen semmel weggli bun'],
+    ['pretzel', 'Pretzel (soft, Brezel)', 270, 8, 55, 2, ['pretzel', 80], 'brezel laugen'],
+    ['croissant', 'Croissant', 406, 8.2, 46, 21, ['croissant', 50], 'gipfeli kipferl'],
+    ['spaetzle', 'Spätzle (cooked)', 150, 5.5, 27, 2.2, null, 'spatzle knöpfli'],
+    ['gnocchi', 'Gnocchi (packet)', 150, 3.5, 33, 0.5],
   ],
   'Meat & Fish': [
     ['chicken-breast-raw', 'Chicken breast (raw)', 120, 22.5, 0, 2.6],
@@ -36,6 +55,8 @@ const table: Record<FoodCategory, Row[]> = {
     ['salmon', 'Salmon (raw)', 208, 20, 0, 13],
     ['tuna-can', 'Tuna, canned in water (drained)', 116, 25.5, 0, 0.8, ['can', 120]],
     ['shrimp', 'Shrimp/prawns (raw)', 85, 20, 0, 0.5],
+    ['bratwurst', 'Bratwurst / sausage', 290, 13, 1, 26, ['sausage', 100], 'wurst cervelat'],
+    ['fish-fingers', 'Fish fingers', 220, 13, 19, 10, ['finger', 28], 'fish sticks'],
   ],
   'Dairy & Eggs': [
     ['egg', 'Egg, whole', 143, 12.6, 0.7, 9.5, ['egg', 50]],
@@ -47,6 +68,11 @@ const table: Record<FoodCategory, Row[]> = {
     ['cottage-cheese', 'Cottage cheese (low fat)', 81, 10.5, 4.8, 2.3],
     ['cheddar', 'Cheddar cheese', 403, 25, 1.3, 33],
     ['mozzarella', 'Mozzarella', 280, 22, 2.2, 20],
+    ['emmental', 'Emmental cheese', 380, 28.5, 0, 30, ['slice', 20], 'emmentaler swiss'],
+    ['gouda', 'Gouda cheese', 356, 25, 2.2, 27.4, ['slice', 20]],
+    ['quark-low-fat', 'Quark, low fat', 67, 12, 4, 0.2, null, 'magerquark topfen'],
+    ['skyr', 'Skyr', 63, 11, 4, 0.2],
+    ['chocolate-milk', 'Chocolate milk', 80, 3.5, 11, 2.5, ['glass', 250], 'kakao schoggi drink'],
     ['parmesan', 'Parmesan', 431, 38, 4, 29, ['tbsp', 5]],
     ['butter', 'Butter', 717, 0.9, 0.1, 81, ['tbsp', 14]],
   ],
@@ -88,8 +114,31 @@ const table: Record<FoodCategory, Row[]> = {
   ],
   Supplements: [
     ['whey', 'Whey protein powder', 400, 80, 8, 6, ['scoop', 30]],
+    ['protein-bar', 'Protein bar', 350, 30, 35, 10, ['bar', 60]],
+  ],
+  // Typical values; restaurant and brand portions vary a lot.
+  'Meals & Fast food': [
+    ['pizza-margherita', 'Pizza Margherita', 245, 10.5, 31, 8.5, ['whole pizza', 340], 'frozen'],
+    ['pizza-salami', 'Pizza Salami / Prosciutto', 265, 11.5, 29, 11, ['whole pizza', 340], 'pepperoni ham frozen'],
+    ['schnitzel-pork', 'Schnitzel, pork (breaded, fried)', 260, 20, 13, 14, ['schnitzel', 150], 'wiener'],
+    ['schnitzel-chicken', 'Schnitzel, chicken (breaded)', 230, 22, 12, 10.5, ['schnitzel', 150], 'poulet'],
+    ['cordon-bleu', 'Cordon bleu (breaded, ham & cheese)', 235, 18, 11, 13, ['piece', 180]],
+    ['chicken-nuggets', 'Chicken nuggets', 270, 15, 17, 16, ['nugget', 18]],
+    ['fries', 'French fries (fried)', 312, 3.4, 41, 15, ['portion', 150], 'pommes frites chips'],
+    ['oven-fries', 'Oven fries', 170, 2.7, 27, 5.5, ['portion', 150], 'pommes frites chips'],
+    ['rosti', 'Rösti', 150, 2.5, 18, 7, ['portion', 200], 'hash brown'],
+    ['doner-kebab', 'Döner kebab (in bread)', 215, 11, 20, 10, ['kebab', 400], 'doner kebap'],
+    ['cheeseburger', 'Cheeseburger (fast food)', 254, 13, 28, 10.5, ['burger', 120], 'mcdonalds'],
+    ['lasagne', 'Lasagne bolognese', 135, 7.5, 12, 6.5, ['portion', 400], 'lasagna'],
+    ['sushi', 'Sushi (mixed)', 150, 6, 28, 1.5, ['piece', 30], 'maki nigiri'],
+    ['falafel', 'Falafel', 333, 13.3, 32, 17.8, ['ball', 17]],
   ],
   'Snacks & Other': [
+    ['nutella', 'Nutella', 539, 6.3, 57.5, 30.9, ['tbsp', 15], 'hazelnut spread'],
+    ['milk-chocolate', 'Milk chocolate', 535, 7.7, 59, 30, ['bar', 100], 'schokolade'],
+    ['crisps', 'Potato crisps', 536, 7, 53, 34, ['bag', 40], 'chips'],
+    ['gummy-bears', 'Gummy bears', 343, 6.9, 77, 0.5, null, 'haribo'],
+    ['cereal-bar', 'Cereal / muesli bar', 420, 6, 65, 14, ['bar', 25]],
     ['dark-chocolate', 'Dark chocolate 70%', 598, 7.8, 46, 43],
     ['honey', 'Honey', 304, 0.3, 82, 0, ['tbsp', 21]],
     ['pesto', 'Pesto (jar)', 450, 5, 6, 45, ['tbsp', 15]],
@@ -97,7 +146,7 @@ const table: Record<FoodCategory, Row[]> = {
 };
 
 export const BUILTIN_FOODS: Food[] = Object.entries(table).flatMap(([category, rows]) =>
-  rows.map(([id, name, kcal, protein, carbs, fat, unit]) => ({
+  rows.map(([id, name, kcal, protein, carbs, fat, unit, keywords]) => ({
     id,
     name,
     category: category as FoodCategory,
@@ -106,5 +155,6 @@ export const BUILTIN_FOODS: Food[] = Object.entries(table).flatMap(([category, r
     carbs,
     fat,
     unit: unit ? { label: unit[0], grams: unit[1] } : undefined,
+    keywords,
   })),
 );

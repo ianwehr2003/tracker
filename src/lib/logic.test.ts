@@ -160,3 +160,22 @@ describe('meal ideas', () => {
     expect(missing).toEqual([]);
   });
 });
+
+describe('food database', () => {
+  it('has unique ids and sane macros (energy ≈ 4P + 4C + 9F)', () => {
+    const ids = BUILTIN_FOODS.map((f) => f.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    const highFibre = new Set(['kelloggs-all-bran']); // fibre adds ~2 kcal/g not counted in P/C/F
+    const off = BUILTIN_FOODS.filter((f) => {
+      if (highFibre.has(f.id)) return false;
+      const est = f.protein * 4 + f.carbs * 4 + f.fat * 9;
+      return Math.abs(est - f.kcal) > Math.max(30, f.kcal * 0.15);
+    }).map((f) => `${f.name}: ${f.kcal} vs ~${Math.round(f.protein * 4 + f.carbs * 4 + f.fat * 9)}`);
+    expect(off).toEqual([]);
+  });
+
+  it('search ignores apostrophes and accents', async () => {
+    const { normalize } = await import('../components/AddFoodSheet');
+    expect(normalize("Kellogg's Rösti")).toBe('kelloggs rosti');
+  });
+});

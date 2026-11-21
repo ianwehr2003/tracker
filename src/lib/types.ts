@@ -18,6 +18,7 @@ export interface Profile {
 }
 
 export type FoodCategory =
+  | 'Cereals'
   | 'Grains & Bread'
   | 'Meat & Fish'
   | 'Dairy & Eggs'
@@ -25,6 +26,7 @@ export type FoodCategory =
   | 'Fruit'
   | 'Vegetables'
   | 'Nuts, Seeds & Oils'
+  | 'Meals & Fast food'
   | 'Supplements'
   | 'Snacks & Other';
 
@@ -39,6 +41,8 @@ export interface Food {
   fat: number;
   /** Optional household unit, e.g. 1 egg = 50 g. */
   unit?: { label: string; grams: number };
+  /** Extra search words, e.g. other names for the food. */
+  keywords?: string;
   custom?: boolean;
 }
 

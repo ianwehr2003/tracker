@@ -6,6 +6,8 @@ import { SHOP_CATEGORIES, type FoodCategory, type ShopCategory, type ShoppingIte
 
 /** Map food-database categories to store sections. */
 const FROM_FOOD: Record<FoodCategory, ShopCategory> = {
+  Cereals: 'Grains & Bread',
+  'Meals & Fast food': 'Frozen',
   'Grains & Bread': 'Grains & Bread',
   'Meat & Fish': 'Meat & Fish',
   'Dairy & Eggs': 'Dairy & Eggs',
